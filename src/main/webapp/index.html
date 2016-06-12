@@ -1,0 +1,38 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>HelloSpringMVC</title>
+</head>
+<body>
+	<form action="hello/test" method="post" accept-charset="utf-8">
+		<label>请输入姓名：</label> <input type="text" name="name" id="input" /> <input
+			type="button" value="提交" id="btn" /> <span id="content"></span>
+	</form>
+
+	<script>
+		var btn = document.getElementById("btn");
+		btn.onclick = function() {
+
+			var name = document.getElementById("input").value;
+			var span = document.getElementById("content");
+			if (name.replace(/(^\s*)|(\s*$)/g, "").length == 0) {
+				span.innerHTML="姓名不能为空";
+				return ;
+			}
+			var request = new XMLHttpRequest();
+			request.open("POST", "hello/test", "true");
+			request.setRequestHeader("Content-type",
+					"application/x-www-form-urlencoded");
+			request.send("name=" + name);
+			request.onreadystatechange = function() {
+				if (request.readyState === 4 && request.status === 200) {
+					var response = request.responseText;
+					var jsonObject = JSON.parse(response);
+					span.innerHTML = "你好, " + jsonObject.name;
+				}
+			};
+		}
+	</script>
+</body>
+</html>
